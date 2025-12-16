@@ -1,0 +1,25 @@
+.home-container {
+  text-align: center;
+  margin-top: 80px;
+  font-family: Arial, sans-serif;
+}
+
+.backend-message {
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 600px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.backend-message.connected {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.backend-message.demo-mode {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
