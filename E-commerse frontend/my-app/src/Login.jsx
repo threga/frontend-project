@@ -1,138 +1,120 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+/* ===============================
+   LOGIN PAGE – BACKEND CONNECTED
+================================ */
+const Login = () => {
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Handle input change
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle login submit (REAL BACKEND CALL)
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrorMsg("");
 
-    // Validation
+    const { email, password } = formData;
+
+    // Basic validation
     if (!email || !password) {
-      setError("Please enter both email and password");
+      setErrorMsg("Both fields are required");
       return;
     }
 
-    if (!email.includes('@')) {
-      setError("Please enter a valid email address");
-      return;
-    }
-
-    setLoading(true);
+    setIsLoading(true);
 
     try {
-      // Simple mock login - no backend required
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      // Mock validation - accept any email/password combination
-      if (email.trim() && password.trim()) {
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("userEmail", email);
-        
-        // Navigate to home page
-        navigate("/", { replace: true });
-      } else {
-        setError("Invalid credentials. Please try again.");
+      // 🔥 REAL BACKEND LOGIN API
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrorMsg(data.message || "Invalid credentials");
+        setIsLoading(false);
+        return;
       }
-    } catch (err) {
-      setError("Login failed. Please try again.");
-      console.error("Login error:", err);
+
+      // ✅ LOGIN SUCCESS
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/", { replace: true });
+
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrorMsg(
+        "Cannot connect to server. Please make sure backend is running on http://localhost:5000"
+      );
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: '#f5f5f5'
-    }}>
-      <form
-        onSubmit={handleLogin}
-        style={{
-          backgroundColor: 'white',
-          padding: '30px',
-          borderRadius: '8px',
-          boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-          width: '350px'
-        }}
-      >
-        <h2 style={{
-          fontSize: '24px',
-          fontWeight: 'bold',
-          marginBottom: '20px',
-          textAlign: 'center'
-        }}>Login</h2>
+    <section className="login-container">
+      <form className="login-box" onSubmit={handleSubmit}>
+        <h2>Welcome Back</h2>
+        <p className="login-subtitle">Sign in to continue shopping</p>
 
-        {error && (
-          <div style={{
-            backgroundColor: '#f8d7da',
-            color: '#721c24',
-            padding: '10px',
-            borderRadius: '4px',
-            marginBottom: '15px',
-            border: '1px solid #f5c6cb',
-            fontSize: '14px'
-          }}>
-            {error}
-          </div>
-        )}
+        {errorMsg && <div className="login-error">{errorMsg}</div>}
 
-        <input
-          type="email"
-          placeholder="Email"
-          style={{
-            width: '100%',
-            marginBottom: '15px',
-            padding: '12px',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            fontSize: '16px'
-          }}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div className="input-group">
+          <label>Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="you@example.com"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          style={{
-            width: '100%',
-            marginBottom: '20px',
-            padding: '12px',
-            border: '1px solid #ddd',
-            borderRadius: '4px',
-            fontSize: '16px'
-          }}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="••••••••"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            backgroundColor: loading ? '#ccc' : '#28a745',
-            color: 'white',
-            padding: '12px',
-            border: 'none',
-            borderRadius: '4px',
-            fontSize: '16px',
-            cursor: loading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {loading ? "Logging in..." : "Login"}
+        <button className="login-btn" type="submit" disabled={isLoading}>
+          {isLoading ? "Signing in..." : "Sign In"}
         </button>
       </form>
-    </div>
+    </section>
   );
-}
+};
+
+export default Login;

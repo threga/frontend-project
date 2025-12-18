@@ -1,37 +1,33 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Navbar from "./Navbar";
 import Home from "./Home";
 import Product from "./Product";
 import ProductDetails from "./ProductDetails";
-import Card from "./Card";
+import Cart from "./Card";
 import Contact from "./Contact";
 import Login from "./Login";
 
-function App() {
+/* ===============================
+   Application Routes
+================================ */
+const App = () => {
   return (
-    <BrowserRouter>
+    <Router>
       <Navbar />
-      <Routes>
-        {/* Home Page */}
-        <Route path="/" element={<Home />} />
 
-        {/* Products Page */}
-        <Route path="/products" element={<Product />} />
-
-        {/* Product Details Page */}
-        <Route path="/product/:id" element={<ProductDetails />} />
-
-        {/* Login Page */}
-        <Route path="/login" element={<Login />} />
-
-        {/* Cart Page */}
-        <Route path="/cart" element={<Card />} />
-
-        {/* Contact Page */}
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-    </BrowserRouter>
+      <main className="app-wrapper">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Product />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </main>
+    </Router>
   );
-}
+};
 
 export default App;

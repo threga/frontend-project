@@ -1,18 +1,27 @@
 import { useState, useEffect } from "react";
 import "./Cart.css";
 
-function Card() {
+function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(savedCart);
+    try {
+      const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+      setCartItems(savedCart);
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
+      setCartItems([]);
+    }
   }, []);
 
   const handleRemove = (productId) => {
-    const updatedCart = cartItems.filter(item => item._id !== productId);
-    setCartItems(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    try {
+      const updatedCart = cartItems.filter(item => item._id !== productId);
+      setCartItems(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    } catch (error) {
+      console.error('Error updating cart in localStorage:', error);
+    }
   };
 
   if (cartItems.length === 0) {
@@ -47,4 +56,4 @@ function Card() {
   );
 }
 
-export default Card;
+export default Cart;

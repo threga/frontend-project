@@ -1,13 +1,31 @@
+/* Cart Page Styling */
 .cart-container {
-  padding: 40px;
-  min-height: 100vh;
-  background: #705c5c;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
 }
 
 .cart-title {
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 32px;
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+
+.empty-container {
+  text-align: center;
+  padding: 100px 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  margin-top: 50px;
+}
+
+.empty-container h2 {
+  font-size: 2rem;
+  color: #7f8c8d;
+  font-weight: 500;
 }
 
 .cart-list {
@@ -17,13 +35,19 @@
 }
 
 .cart-card {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
   display: flex;
   align-items: center;
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  gap: 20px;
+  gap: 25px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.cart-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
 }
 
 .cart-img {
@@ -31,6 +55,7 @@
   height: 120px;
   object-fit: cover;
   border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .cart-info {
@@ -38,33 +63,52 @@
 }
 
 .cart-info h3 {
-  margin: 0;
-  font-size: 22px;
+  font-size: 1.4rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .cart-price {
-  margin-top: 8px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #28a745;
+  font-size: 1.3rem;
+  color: #e74c3c;
+  font-weight: 700;
 }
 
 .remove-btn {
-  background: #ff4d4d;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
   color: white;
-  font-size: 15px;
-  cursor: pointer;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
 }
 
 .remove-btn:hover {
-  background: #e60000;
+  background: linear-gradient(45deg, #c0392b, #e74c3c);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
 }
 
-.empty-container {
-  text-align: center;
-  margin-top: 60px;
-  font-size: 24px;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .cart-container {
+    padding: 80px 15px 20px;
+  }
+  
+  .cart-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .cart-img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .cart-title {
+    font-size: 2rem;
+  }
 }

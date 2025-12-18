@@ -1,27 +1,45 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
 const API = axios.create({
   baseURL: "http://localhost:5000", // backend URL
 });
 
-
 export const productAPI = {
     getAllProducts: async () => {
-        const response = await API.get('/getproduct');
-        return response.data;
+        try {
+            const response = await API.get('/getproduct');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            throw error;
+        }
     },
     createProduct: async (productData) => {
-        const response = await API.post('/postProduct', productData);
-        return response.data;
+        try {
+            const response = await API.post('/postProduct', productData);
+            return response.data;
+        } catch (error) {
+            console.error('Error creating product:', error);
+            throw error;
+        }
     },
     updateProduct: async (id, productData) => {
-        const response = await API.put(`/updateProduct/${id}`, productData);
-        return response.data;
+        try {
+            const response = await API.put(`/updateProduct/${id}`, productData);
+            return response.data;
+        } catch (error) {
+            console.error('Error updating product:', error);
+            throw error;
+        }
     },
     deleteProduct: async (id) => {
-        const response = await API.delete(`/deleteProduct/${id}`);
-        return response.data;
+        try {
+            const response = await API.delete(`/deleteProduct/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            throw error;
+        }
     },
 };
 

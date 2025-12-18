@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
+import "./ProductDetails.css";
 
 function ProductDetails() {
   const { id } = useParams();
+  const [showSuccess, setShowSuccess] = useState(false);
   
   const products = [
     {
@@ -29,63 +32,71 @@ function ProductDetails() {
 
   const product = products.find((p) => p._id === id);
 
-  if (!product) return <h2>Product not found!</h2>;
+  if (!product) return (
+    <div className="product-details-container">
+      <div className="product-not-found">
+        <h2>Product not found!</h2>
+      </div>
+    </div>
+  );
 
   const handleAddToCart = () => {
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingItem = existingCart.find((item) => item._id === product._id);
+    try {
+      const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+      const existingItem = existingCart.find((item) => item._id === product._id);
 
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      existingCart.push({ ...product, quantity: 1 });
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        existingCart.push({ ...product, quantity: 1 });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
     }
+  };
 
-    localStorage.setItem("cart", JSON.stringify(existingCart));
-    alert(`${product.name} added to cart!`);
+  const handleBuyNow = () => {
+    handleAddToCart();
+    // Navigate to cart or checkout page
+    console.log('Redirecting to checkout...');
   };
 
   return (
-    <div style={{padding: '20px', maxWidth: '800px', margin: '0 auto'}}>
-      <div style={{display: 'flex', gap: '30px', alignItems: 'flex-start'}}>
-        <div style={{flex: '1'}}>
+    <div className="product-details-container">
+      {showSuccess && (
+        <div className="success-message">
+          ✅ {product.name} added to cart successfully!
+        </div>
+      )}
+      
+      <div className="product-details-content">
+        <div className="product-image-section">
           <img 
             src={product.image} 
             alt={product.name} 
-            style={{width: '100%', maxWidth: '400px', borderRadius: '8px'}}
+            className="product-details-image"
           />
         </div>
         
-        <div style={{flex: '1'}}>
-          <h1>{product.name}</h1>
-          <p style={{fontSize: '1.1rem', color: '#666', margin: '15px 0'}}>{product.description}</p>
-          <h2 style={{color: '#e74c3c', fontSize: '2rem', margin: '20px 0'}}>₹{product.price.toLocaleString()}</h2>
+        <div className="product-info-section">
+          <h1 className="product-details-title">{product.name}</h1>
+          <p className="product-details-description">{product.description}</p>
+          <h2 className="product-details-price">₹{product.price.toLocaleString()}</h2>
           
-          <div style={{display: 'flex', gap: '10px', marginTop: '30px'}}>
+          <div className="product-actions">
             <button 
               onClick={handleAddToCart}
-              style={{
-                padding: '12px 24px', 
-                backgroundColor: '#28a745', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '16px'
-              }}
+              className="add-to-cart-btn"
             >
               Add to Cart
             </button>
             <button 
-              style={{
-                padding: '12px 24px', 
-                backgroundColor: '#007bff', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '16px'
-              }}
+              onClick={handleBuyNow}
+              className="buy-now-btn"
             >
               Buy Now
             </button>
